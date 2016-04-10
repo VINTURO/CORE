@@ -1,0 +1,1 @@
+java -jar target/vinturo-core-0.0.1.jar server config.yml
