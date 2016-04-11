@@ -65,7 +65,19 @@
                             <info>
                                 <title>VINTURO API</title>
                                 <version>${project.version}</version>
-                                <description>Read the documentation</description>
+                                <description>Documentation for developers</description>
+                                <termsOfService>
+                                    https://github.com/VINTURO/CORE/blob/master/LICENSE
+                                </termsOfService>
+                                <contact>
+                                    <email>sebastien.vermeille@gmail.com</email>
+                                    <name>Sebastien Vermeille</name>
+                                    <url>http://ww.vinturo.com</url>
+                                </contact>
+                                <license>
+                                    <url>https://opensource.org/licenses/MIT</url>
+                                    <name>The MIT License (MIT)</name>
+                                </license>
                             </info>
                             <securityDefinitions>
                                 <securityDefinition>
@@ -73,7 +85,7 @@
                                     <type>basic</type>
                                 </securityDefinition>
                             </securityDefinitions>
-                            <templatePath>${basedir}/resources/doc/templates/strapdown.html.hbs</templatePath>
+                            <templatePath>${basedir}/src/main/doc/strapdown.html.hbs</templatePath>
                             <outputPath>${basedir}/doc/api.html</outputPath>
                             <swaggerDirectory>${basedir}/target/classes/swagger</swaggerDirectory>
                         </apiSource>
@@ -186,13 +198,6 @@
             <artifactId>hibernate-entitymanager</artifactId>
             <version>${hibernate.version}</version>
         </dependency>
-        <!--
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <version>${hibernate.version}</version>
-        </dependency>
-        -->
         <dependency>
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
@@ -247,6 +252,11 @@
         <dependency>
             <groupId>io.swagger</groupId>
             <artifactId>swagger-annotations</artifactId>
+            <version>${swagger.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-hibernate-validations</artifactId>
             <version>${swagger.version}</version>
         </dependency>
         <!-- Test Dependencies -->

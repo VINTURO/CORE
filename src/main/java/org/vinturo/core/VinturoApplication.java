@@ -18,10 +18,13 @@ import io.dropwizard.setup.Environment;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.vinturo.core.io.notifications.NotifierModule;
 import org.vinturo.core.io.ws.rest.RestModule;
+import org.vinturo.core.io.ws.rest.impl.AuthWSImpl;
 import org.vinturo.core.storage.DatabaseModule;
 import org.vinturo.core.storage.StorageModule;
 
+import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
+import java.util.EnumSet;
 
 public class VinturoApplication extends Application<VinturoConfiguration> {
 
@@ -83,11 +86,13 @@ public class VinturoApplication extends Application<VinturoConfiguration> {
 
 
         environment.getApplicationContext().addServlet("com.github.valdr.ValidationRulesServlet", "/validationRules");
+        */
 
         // Add URL mapping
         cors.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
 
-        environment.jersey().register(injector.getInstance(AuthResource.class));
+        environment.jersey().register(injector.getInstance(AuthWSImpl.class));
+/*
         environment.jersey().register(injector.getInstance(GroupResource.class));
         environment.jersey().register(injector.getInstance(UserResource.class));
         environment.jersey().register(injector.getInstance(RoleResource.class));
@@ -97,7 +102,6 @@ public class VinturoApplication extends Application<VinturoConfiguration> {
         environment.jersey().register(injector.getInstance(RuleResource.class));
         environment.jersey().register(injector.getInstance(PhilipsHueResource.class));
         environment.jersey().register(injector.getInstance(EstimoteResource.class));
-
 
         injector.getInstance(RulesEngine.class).init();
 

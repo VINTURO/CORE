@@ -8,20 +8,13 @@
  */
 package org.vinturo.core.io.ws.rest;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import org.vinturo.core.storage.entity.user.User;
 import org.vinturo.core.storage.entity.user.UserRegistration;
 
-import javax.validation.Valid;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 
 public interface AuthWS {
 
+    /*
     @ApiOperation(value = "Register a new user")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Success, user is registred", response = User.class),
@@ -31,6 +24,8 @@ public interface AuthWS {
     })
     @POST
     @Path("/register")
-    Response register(@ApiParam(value = "User to create", required = true) @Valid UserRegistration registration);
+    */
+    // Response register(@ApiParam(value = "User to create", required = true) @Valid UserRegistration registration);
+    Response register(UserRegistration registration);
 
 }
