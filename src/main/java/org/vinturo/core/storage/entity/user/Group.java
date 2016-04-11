@@ -9,16 +9,13 @@
 package org.vinturo.core.storage.entity.user;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import org.vinturo.core.security.Role;
 import org.vinturo.core.storage.entity.AbstractEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @NamedQueries({
@@ -33,15 +30,15 @@ public class Group extends AbstractEntity {
 
     @NotNull
     @Size(min = 3, max = 45)
-    @Column(name = "name", length = 45, unique = true)
+    @Column(name = "NAME", length = 45, unique = true)
     private String name;
 
     @JsonBackReference
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
-    private List<User> users = new ArrayList<User>();
+    private List<User> users = new ArrayList<>();
 
-    @Column(name = "ROLES", nullable = true)
-    private Set<Role> roles = new HashSet<>();
+    // @Column(name = "ROLES", nullable = true)
+    // private Set<Role> roles = new HashSet<>();
 
     public Group() {
         super();
@@ -60,14 +57,15 @@ public class Group extends AbstractEntity {
         this.name = name;
     }
 
-    public void addRole(Role role) {
-        this.roles.add(role);
-    }
+    /*
+        public void addRole(Role role) {
+            this.roles.add(role);
+        }
 
-    public Set<Role> getRoles() {
-        return this.roles;
-    }
-
+        public Set<Role> getRoles() {
+            return this.roles;
+        }
+    */
     public void addUser(User user) {
         this.users.add(user);
     }

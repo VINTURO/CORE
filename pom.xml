@@ -51,6 +51,44 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>com.github.kongchen</groupId>
+                <artifactId>swagger-maven-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <apiSources>
+                        <apiSource>
+                            <springmvc>false</springmvc>
+                            <locations>org.vinturo.core.io.ws</locations>
+                            <schemes>http</schemes>
+                            <host>localhost:8088</host>
+                            <basePath>/api</basePath>
+                            <info>
+                                <title>VINTURO API</title>
+                                <version>${project.version}</version>
+                                <description>Read the documentation</description>
+                            </info>
+                            <securityDefinitions>
+                                <securityDefinition>
+                                    <name>basicAuth</name>
+                                    <type>basic</type>
+                                </securityDefinition>
+                            </securityDefinitions>
+                            <templatePath>${basedir}/resources/doc/templates/strapdown.html.hbs</templatePath>
+                            <outputPath>${basedir}/doc/api.html</outputPath>
+                            <swaggerDirectory>${basedir}/target/classes/swagger</swaggerDirectory>
+                        </apiSource>
+                    </apiSources>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>2.3</version>
@@ -211,7 +249,6 @@
             <artifactId>swagger-annotations</artifactId>
             <version>${swagger.version}</version>
         </dependency>
-
         <!-- Test Dependencies -->
         <dependency>
             <groupId>junit</groupId>

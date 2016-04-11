@@ -19,8 +19,8 @@ import java.security.Principal;
 @Entity
 @Table(name = "CONSUMERS",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"UID", "USER"}),
-                @UniqueConstraint(columnNames = {"NAME", "USER"})
+                @UniqueConstraint(columnNames = {"UID"}),
+                @UniqueConstraint(columnNames = {"NAME", "USER_ID"})
         }
 )
 
@@ -34,22 +34,28 @@ public class Consumer extends AbstractEntity implements Principal {
     @NotNull(message = "{consumer.user.is.required}")
     @JsonManagedReference
     @ManyToOne(optional = false)
+    @JoinColumn(name = "USER_ID")
     private User user;
+
     @Basic(optional = false)
     @NotNull(message = "{consumer.name.is.required}")
     private String name;
+
     @Basic(optional = false)
     @NotNull(message = "{consumer.type.is.required}")
     @Enumerated(EnumType.STRING)
     private ConsumerType type;
+
     @Basic(optional = false)
     @NotNull(message = "{consumer.os.is.required}")
     @Enumerated(EnumType.STRING)
     private ConsumerOS os;
+
     @Basic(optional = false)
     @NotNull(message = "{consumer.uid.is.required}")
     @Column(name = "UID")
     private String uid;
+
     @Column(name = "API_KEY", unique = true, nullable = false)
     private String apiKey;
 
