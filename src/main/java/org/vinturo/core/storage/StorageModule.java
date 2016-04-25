@@ -10,9 +10,15 @@ package org.vinturo.core.storage;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
+import org.vinturo.core.storage.dao.GroupDAO;
 import org.vinturo.core.storage.dao.UserDAO;
-import org.vinturo.core.storage.dao.impl.UserDAOImpl;
+import org.vinturo.core.storage.dao.GroupDAOImpl;
+import org.vinturo.core.storage.dao.UserDAOImpl;
+import org.vinturo.core.storage.service.AuthService;
+import org.vinturo.core.storage.service.GroupService;
 import org.vinturo.core.storage.service.UserService;
+import org.vinturo.core.storage.service.impl.AuthServiceImpl;
+import org.vinturo.core.storage.service.impl.GroupServiceImpl;
 import org.vinturo.core.storage.service.impl.UserServiceImpl;
 
 public class StorageModule extends AbstractModule {
@@ -26,6 +32,12 @@ public class StorageModule extends AbstractModule {
 
         bind(UserDAO.class).to(UserDAOImpl.class).in(Singleton.class);
         bind(UserService.class).to(UserServiceImpl.class).in(Singleton.class);
+
+        bind(AuthService.class).to(AuthServiceImpl.class).in(Singleton.class);
+
+        bind(GroupDAO.class).to(GroupDAOImpl.class).in(Singleton.class);
+        bind(GroupService.class).to(GroupServiceImpl.class).in(Singleton.class);
+
         /*
         bind(UserServiceImpl.class).in(Singleton.class);
         bind(GroupServiceImpl.class).in(Singleton.class);

@@ -10,7 +10,6 @@ package org.vinturo.core.storage.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.vinturo.core.storage.entity.user.User;
-import org.vinturo.core.util.APIKeyUtil;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -71,11 +70,6 @@ public class Consumer extends AbstractEntity implements Principal {
 
     }
 
-    @PrePersist
-    void generateAPIKey() {
-        this.apiKey = APIKeyUtil.generate();
-    }
-
     public User getUser() {
         return this.user;
     }
@@ -120,4 +114,7 @@ public class Consumer extends AbstractEntity implements Principal {
         return this.apiKey;
     }
 
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
+    }
 }

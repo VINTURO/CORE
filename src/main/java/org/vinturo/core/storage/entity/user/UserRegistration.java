@@ -24,29 +24,27 @@ public class UserRegistration implements Serializable {
     @Size(min = 8, max = 60)
     private String plainPassword;
 
-    @NotNull
-    @Size(min = 8, max = 60)
-    private String verificationPlainPassword;
-
     public UserRegistration() {
     }
 
-    public UserRegistration(String username, String plainPassword, String vertificationPlainPassword) {
+    public UserRegistration(String username, String plainPassword) {
         this.username = username;
         this.plainPassword = plainPassword;
-        this.verificationPlainPassword = vertificationPlainPassword;
     }
 
     public String getUsername() {
         return this.username;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public String getPlainPassword() {
         return this.plainPassword;
     }
 
-    public String getVerificationPlainPassword() {
-        return this.verificationPlainPassword;
+    public void setPlainPassword(String plainPassword) {
+        this.plainPassword = plainPassword;
     }
-
 }

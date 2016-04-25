@@ -30,7 +30,7 @@ public class InvalidCreditentialsException extends WebApplicationException imple
 
     @Override
     public Response getResponse() {
-        return Response.status(401).build();    // Unauthorized
+        return Response.status(403).build();    // Unauthorized
     }
 
 }

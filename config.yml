@@ -7,7 +7,8 @@ server:
   adminConnectors:
     - type: http
       port: 8081
-
+swagger:
+  resourcePackage: "org.vinturo.core.io.ws.rest"
 logging:
   level: INFO
   loggers:

@@ -20,9 +20,9 @@ public class ApprovedUserRegistration extends UserRegistration implements Serial
         super();
     }
 
-    public ApprovedUserRegistration(String username, String plainPassword, String vertificationPlainPassword,
+    public ApprovedUserRegistration(String username, String plainPassword,
                                     Long groupId) {
-        super(username, plainPassword, vertificationPlainPassword);
+        super(username, plainPassword);
         this.groupId = groupId;
 
     }

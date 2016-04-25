@@ -8,7 +8,7 @@
  */
 package org.vinturo.core.security.annotation;
 
-import org.vinturo.core.security.Role;
+import org.vinturo.core.storage.entity.user.Role;
 
 import javax.ws.rs.NameBinding;
 import java.lang.annotation.ElementType;

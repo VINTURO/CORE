@@ -8,6 +8,7 @@
  */
 package org.vinturo.core.storage;
 
+import com.google.inject.AbstractModule;
 import com.google.inject.persist.jpa.JpaPersistModule;
 
 import java.util.Properties;
@@ -15,29 +16,24 @@ import java.util.Properties;
 /**
  * This class manage database settings. For some reasonsGuice JpaPersistModule is final (it cannot be extended)
  */
-public class DatabaseModule {
-
-    private final JpaPersistModule jpaModule;
+public class DatabaseModule extends AbstractModule {
 
     public DatabaseModule() {
+    }
+
+    @Override
+    protected void configure() {
 
         final Properties properties = new Properties();
         properties.put("javax.persistence.jdbc.driver", "org.hsqldb.jdbcDriver");
         properties.put("javax.persistence.jdbc.url", "jdbc:hsqldb:file:vinturo");
         properties.put("javax.persistence.jdbc.user", "SA");
         properties.put("javax.persistence.jdbc.password", "");
-        jpaModule = new JpaPersistModule("VinturoUnit");
+        JpaPersistModule jpaModule = new JpaPersistModule("VinturoUnit");
         jpaModule.properties(properties);
 
-    }
+        install(jpaModule);
 
-    /**
-     * Returns the created JpaPersistModule
-     *
-     * @return JpaPersistModule
-     */
-    public JpaPersistModule getJpaModule() {
-        return this.jpaModule;
     }
 
 }

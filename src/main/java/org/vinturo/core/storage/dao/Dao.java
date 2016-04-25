@@ -18,6 +18,10 @@ public interface DAO<T> {
 
     <T> void persist(T object);
 
+    <T> void update(T object);
+
+    <T> void persistAndFlush(final T object);
+
     <T, ID> T findById(Class<T> clazz, ID id);
 
     <T> T merge(T object);
@@ -31,5 +35,4 @@ public interface DAO<T> {
     <T> List<T> find(Class<T> clazz, String namedQuery, Map<String, Object> paramsMap);
 
     Provider<EntityManager> getEntityManager();
-
 }

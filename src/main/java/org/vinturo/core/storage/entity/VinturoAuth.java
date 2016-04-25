@@ -9,23 +9,28 @@
 package org.vinturo.core.storage.entity;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 public class VinturoAuth implements Serializable {
 
+    @NotNull
     private String username;
 
+    @NotNull
     private String password;
 
     @Valid
+    @NotNull
     private Device device;
 
     public VinturoAuth() {
     }
 
-    public VinturoAuth(String username, String password) {
+    public VinturoAuth(String username, String password, Device device) {
         this.username = username;
         this.password = password;
+        this.device = device;
     }
 
     public String getUsername() {

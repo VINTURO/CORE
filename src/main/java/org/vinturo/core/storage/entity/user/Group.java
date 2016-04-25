@@ -15,7 +15,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @NamedQueries({
@@ -37,8 +39,11 @@ public class Group extends AbstractEntity {
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     private List<User> users = new ArrayList<>();
 
-    // @Column(name = "ROLES", nullable = true)
-    // private Set<Role> roles = new HashSet<>();
+    @Enumerated(EnumType.STRING)
+    @Column(name = "ROLES")
+    @CollectionTable(name = "GROUPS_HAVE_ROLES")
+    @ElementCollection(targetClass = Role.class)
+    private Set<Role> roles = new HashSet<>();
 
     public Group() {
         super();
@@ -57,15 +62,14 @@ public class Group extends AbstractEntity {
         this.name = name;
     }
 
-    /*
-        public void addRole(Role role) {
-            this.roles.add(role);
-        }
+    public void addRole(Role role) {
+        this.roles.add(role);
+    }
 
-        public Set<Role> getRoles() {
-            return this.roles;
-        }
-    */
+    public Set<Role> getRoles() {
+        return this.roles;
+    }
+
     public void addUser(User user) {
         this.users.add(user);
     }

@@ -11,62 +11,59 @@ package org.vinturo.core.storage.entity.user;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.vinturo.core.exceptions.ConsumerAlreadyLinkedWithUserException;
-import org.vinturo.core.security.Role;
 import org.vinturo.core.storage.entity.AbstractEntity;
 import org.vinturo.core.storage.entity.Consumer;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @NamedQueries({
-        @NamedQuery(name = "User.findByUsername", query = User.QUERY_FIND_BY_USERNAME)
+        @NamedQuery(name = User.QUERY_FIND_BY_USERNAME, query = "SELECT u FROM User u WHERE u.username = :username")
 })
 @Table(name = "USERS")
 public class User extends AbstractEntity {
 
-    public static final String QUERY_FIND_BY_USERNAME = "SELECT u FROM User u WHERE u.username = :username";
+    public static final String QUERY_FIND_BY_USERNAME = "User.findByUsername";
 
     private static final long serialVersionUID = 3276795655534895602L;
 
     @NotNull
     @Size(min = 5, max = 45)
-    @Column(name = "USERNAME", length = 45, unique = true)
+    @Column(name = "USERNAME", length = 45, unique = true, nullable = false)
     private String username;
 
-    @Size(min = 8, max = 60)
-    @Column(name = "PASSWORD", length = 60, nullable = false)
+    @Size(min = 8, max = 256)
+    @Column(name = "PASSWORD", length = 256, nullable = false)
     @JsonIgnore
     private String password;
 
     @NotNull
-    @Column(name = "APPROVED", length = 1)
+    @Column(name = "APPROVED", length = 1, nullable = false)
     private boolean approved;
 
     @Embedded
     private Person profile;
 
     @JsonBackReference
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Consumer> consumers = new ArrayList<Consumer>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Consumer> consumers;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "GROUP_ID")
     private Group group;
 
     public User() {
-        super();
-        this.profile = new Person();
+        this(null, null);
     }
 
     public User(String username, String hashedPassword) {
-        super();
         this.username = username;
         this.password = hashedPassword;
+        this.consumers = new ArrayList<>();
+        this.profile = new Person();
     }
 
     public String getUsername() {
@@ -92,32 +89,31 @@ public class User extends AbstractEntity {
         return this.password;
     }
 
+    /**
+     * Returns an immutable list of consumers. If you want to add a consumer simply use addConsumer() method instead.
+     *
+     * @return
+     */
     public List<Consumer> getConsumers() {
-        return this.consumers;
+        return Collections.unmodifiableList(this.consumers);
     }
 
-    public void addConsumer(Consumer consumer) throws ConsumerAlreadyLinkedWithUserException {
-
-        for (Consumer cons : this.getConsumers()) {
-            if (cons.getUID().equals(consumer.getUID()) && cons.getType().equals(consumer.getType())) {
-
-                throw new ConsumerAlreadyLinkedWithUserException();
-            }
-        }
+    public void addConsumer(Consumer consumer) {
 
         consumer.setUser(this);
-        this.getConsumers().add(consumer);
+        this.consumers.add(consumer);
 
     }
 
     @JsonProperty
-    public List<Role> getRoles() {
-
-        List<Role> roles = new ArrayList<Role>();
+    public Set<Role> getRoles() {
+        Set<Role> roles = new HashSet<>();
 
         if (this.group != null) {
 
-            roles.addAll(group.getRoles());
+            this.group.getRoles().forEach(role -> {
+                roles.add(role);
+            });
 
         }
 

@@ -11,5 +11,9 @@ package org.vinturo.core.io;
 public class Routes {
 
     public static final String AUTH = "/auth";
+
+    public static final String REGISTER = "/register";
+
     public static final String USERS = "/users";
+    public static final String APPROVE = "/approve";
 }

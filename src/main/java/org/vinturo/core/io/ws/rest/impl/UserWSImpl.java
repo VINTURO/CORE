@@ -8,35 +8,30 @@
  */
 package org.vinturo.core.io.ws.rest.impl;
 
+import io.swagger.annotations.Api;
 import org.vinturo.core.io.Routes;
-import org.vinturo.core.storage.dao.impl.UserDAOImpl;
+import org.vinturo.core.io.ws.rest.UserWS;
 import org.vinturo.core.storage.entity.user.User;
+import org.vinturo.core.storage.service.UserService;
 
+import javax.inject.Inject;
 import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
+@Api(value = Routes.USERS)
 @Path(Routes.USERS)
-@Produces(MediaType.APPLICATION_JSON)
-public class UserWSImpl implements org.vinturo.core.io.ws.rest.UserWS {
+public class UserWSImpl implements UserWS {
 
-    private UserDAOImpl dao;
+    private final UserService service;
 
-    public UserWSImpl(UserDAOImpl dao) {
-        this.dao = dao;
+    @Inject
+    public UserWSImpl(UserService service) {
+        this.service = service;
     }
 
     @Override
-    public User findPerson(Integer id) {
-        return null;
+    public Response approveUser(String username) {
+        User approvedUser = service.approveUser(username);
+        return Response.status(200).entity(approvedUser).build();
     }
-
-    /*
-    @Override
-    @GET
-    @Timed
-    public User findPerson(@PathParam("id") Integer id) {
-        return dao.findById(id);
-    }
-    */
 }

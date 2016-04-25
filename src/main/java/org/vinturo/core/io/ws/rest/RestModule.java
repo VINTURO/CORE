@@ -9,22 +9,27 @@
 package org.vinturo.core.io.ws.rest;
 
 import com.google.inject.AbstractModule;
+import io.dropwizard.setup.Environment;
+import org.vinturo.core.io.ws.rest.impl.AuthWSImpl;
+import org.vinturo.core.io.ws.rest.impl.RegistrationWSImpl;
+import org.vinturo.core.io.ws.rest.impl.UserWSImpl;
 
 public class RestModule extends AbstractModule {
 
-    public RestModule() {
+    private Environment environment;
 
+    public RestModule(Environment environment) {
+        this.environment = environment;
     }
 
     @Override
     protected void configure() {
 
-        //    bind(DAO.class).to(AbstractDAO.class).in(Singleton.class);
-        //     bind(UserDAO.class).to(UserDAOImpl.class).in(Singleton.class);
-        /*
-        bind(UserServiceImpl.class).in(Singleton.class);
-        bind(GroupServiceImpl.class).in(Singleton.class);
+        bind(AuthWS.class).to(AuthWSImpl.class);
+        bind(RegistrationWS.class).to(RegistrationWSImpl.class);
+        bind(UserWS.class).to(UserWSImpl.class);
 
+/*
         bind(LightService.class).in(Singleton.class);
         bind(BeaconService.class).in(Singleton.class);
 
@@ -42,5 +47,7 @@ public class RestModule extends AbstractModule {
         if(GlobalSettings.IS_ESTIMOTE_SUPPORT_ENABLED)
             bind(EstimoteService.class).in(Singleton.class);
             */
+        // injector.getInstance(AuthWSImpl.class)
+        //    this.environment.jersey().register(UserWSImpl.class);
     }
 }

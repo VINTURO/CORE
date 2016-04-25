@@ -9,6 +9,8 @@
 package org.vinturo.core.storage.service.impl;
 
 import com.google.inject.Inject;
+import com.google.inject.persist.Transactional;
+import org.vinturo.core.exceptions.GroupAlreadyRegistredException;
 import org.vinturo.core.exceptions.GroupNotFoundException;
 import org.vinturo.core.storage.dao.GroupDAO;
 import org.vinturo.core.storage.entity.user.Group;
@@ -19,8 +21,13 @@ public class GroupServiceImpl implements GroupService {
     private final GroupDAO dao;
 
     @Inject
-    public GroupServiceImpl(GroupDAO dao) {
+    public GroupServiceImpl(final GroupDAO dao) {
         this.dao = dao;
+    }
+
+    @Override
+    public Group findById(final Long id) throws GroupNotFoundException {
+        return null;
     }
 
     @Override
@@ -32,51 +39,27 @@ public class GroupServiceImpl implements GroupService {
         return found;
     }
 
-//    @Override
-//    @Transactional
-//    public Group createGroup(Group group) throws GroupAlreadyRegistredException {
-//
-//        // Check username is unique
-//        if (this.isGroupNameAlreadyRegistred(group.getName())) {
-//            throw new GroupAlreadyRegistredException();
-//        }
-//
-//        //   usr.addRole(Role.ROLE_USER);
-//
-//        EntityManager em = dao.getEntityManager().get();
-//
-//        em.persist(group);
-//        em.flush();
-//
-//        return group;
-//    }
-//
-//    @Override
-//    public Group findGroupByName(String name) throws GroupNotFoundException {
-//
-//        try {
-//            EntityManager em = dao.getEntityManager().get();
-//            TypedQuery<Group> query = em.createNamedQuery("Group.findByName", Group.class).setParameter("name", name);
-//            Group found = query.setMaxResults(1).getSingleResult();
-//            return found;
-//        } catch (NoResultException ex) {
-//            throw new GroupNotFoundException();
-//        }
-//
-//    }
-//
-//    @Override
-//    public boolean isGroupNameAlreadyRegistred(String name) {
-//
-//        EntityManager em = dao.getEntityManager().get();
-//        TypedQuery<Group> query = em.createNamedQuery("Group.findByName", Group.class).setParameter("name", name);
-//        List<Group> found = query.setMaxResults(1).getResultList();
-//        if (found.size() > 0) {
-//            return true;
-//        } else {
-//            return false;
-//        }
-//
-//    }
+    @Override
+    @Transactional
+    public Group create(Group group) throws GroupAlreadyRegistredException {
+
+        // Check username is unique
+        if (this.isGroupNameAlreadyRegistred(group.getName())) {
+            throw new GroupAlreadyRegistredException();
+        }
+
+        //   usr.addRole(Role.ROLE_USER);
+
+        dao.persist(group);
+
+        return group;
+    }
+
+    @Override
+    public boolean isGroupNameAlreadyRegistred(String name) {
+
+        return true;
+
+    }
 
 }

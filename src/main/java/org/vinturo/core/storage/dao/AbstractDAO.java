@@ -6,12 +6,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package org.vinturo.core.storage.dao.impl;
+package org.vinturo.core.storage.dao;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.persist.Transactional;
-import org.vinturo.core.storage.dao.DAO;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -37,6 +36,17 @@ public class AbstractDAO<T> implements DAO<T> {
     @Override
     public <T> void persist(final T object) {
         entityManager.get().persist(object);
+    }
+
+    @Override
+    public <T> void update(final T object) {
+        entityManager.get().flush();
+    }
+
+    @Override
+    public <T> void persistAndFlush(final T object) {
+        entityManager.get().persist(object);
+        entityManager.get().flush();
     }
 
     @Override

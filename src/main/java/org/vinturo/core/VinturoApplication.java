@@ -13,14 +13,22 @@ import com.google.inject.Injector;
 import com.google.inject.persist.PersistFilter;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
+import io.dropwizard.lifecycle.ServerLifecycleListener;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import io.federecio.dropwizard.swagger.SwaggerBundle;
+import io.federecio.dropwizard.swagger.SwaggerBundleConfiguration;
+import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.vinturo.core.io.notifications.NotifierModule;
 import org.vinturo.core.io.ws.rest.RestModule;
 import org.vinturo.core.io.ws.rest.impl.AuthWSImpl;
+import org.vinturo.core.io.ws.rest.impl.RegistrationWSImpl;
+import org.vinturo.core.io.ws.rest.impl.UserWSImpl;
 import org.vinturo.core.storage.DatabaseModule;
+import org.vinturo.core.storage.PopulateDatabase;
 import org.vinturo.core.storage.StorageModule;
+import org.vinturo.core.storage.service.impl.UserServiceImpl;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
@@ -41,8 +49,23 @@ public class VinturoApplication extends Application<VinturoConfiguration> {
     public void initialize(Bootstrap<VinturoConfiguration> bootstrap) {
 
         bootstrap.addBundle(new AssetsBundle("/swagger", "/swagger", null, "swagger"));
-        bootstrap.addBundle(new AssetsBundle("/assets", "/shared", null, "shared"));
+        //       bootstrap.addBundle(new AssetsBundle("/assets", "/shared", null, "shared"));
         //       NotifierService.getInstance();
+
+        bootstrap.addBundle(new SwaggerBundle<VinturoConfiguration>() {
+
+            @Override
+            protected SwaggerBundleConfiguration getSwaggerBundleConfiguration(VinturoConfiguration configuration) {
+                // Get version from pom.xml
+                configuration.swaggerBundleConfiguration.setLicense("The MIT License (MIT)");
+                configuration.swaggerBundleConfiguration.setLicenseUrl("https://github.com/VINTURO/CORE/blob/master/LICENSE");
+                configuration.swaggerBundleConfiguration.setContact("Sebastien Vermeille");
+                configuration.swaggerBundleConfiguration.setTitle("VINTURO API");
+                configuration.swaggerBundleConfiguration.setDescription("Welcome dear developer ! Have fun with this api and please contribute to vinturo's project.");
+                configuration.swaggerBundleConfiguration.setValidatorUrl("1.0.0");  // TODO: Read it directly from the pom.xml or find an alternative
+                return configuration.swaggerBundleConfiguration;
+            }
+        });
 
     }
 
@@ -53,11 +76,22 @@ public class VinturoApplication extends Application<VinturoConfiguration> {
         final Injector injector = Guice.createInjector(
                 new AppModule(configuration, environment),
                 new NotifierModule(),
-                new DatabaseModule().getJpaModule(),
+                new DatabaseModule(),
                 new StorageModule(),
-                new RestModule()
+                new RestModule(environment)
         );
         environment.servlets().addFilter("persistFilter", injector.getInstance(PersistFilter.class));
+
+        // Init database with base data
+        environment.lifecycle().addServerLifecycleListener(new ServerLifecycleListener() {
+            @Override
+            public void serverStarted(Server server) {
+
+                PopulateDatabase populator = new PopulateDatabase(injector.getInstance(UserServiceImpl.class));
+                populator.init();
+
+            }
+        });
 
         // CORS Settings
         final FilterRegistration.Dynamic cors = environment.servlets().addFilter("CORS", CrossOriginFilter.class);
@@ -91,7 +125,10 @@ public class VinturoApplication extends Application<VinturoConfiguration> {
         // Add URL mapping
         cors.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
 
+        // TODO: Look if we cannot directly register them from the RestModule itself
         environment.jersey().register(injector.getInstance(AuthWSImpl.class));
+        environment.jersey().register(injector.getInstance(RegistrationWSImpl.class));
+        environment.jersey().register(injector.getInstance(UserWSImpl.class));
 /*
         environment.jersey().register(injector.getInstance(GroupResource.class));
         environment.jersey().register(injector.getInstance(UserResource.class));

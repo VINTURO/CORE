@@ -9,6 +9,8 @@
 package org.vinturo.core.storage.service;
 
 import com.google.inject.persist.Transactional;
+import org.vinturo.core.exceptions.UserIsAlreadyApprovedException;
+import org.vinturo.core.exceptions.UserNotFoundException;
 import org.vinturo.core.exceptions.UsernameIsAlreadyRegistredException;
 import org.vinturo.core.storage.entity.user.User;
 import org.vinturo.core.storage.entity.user.UserRegistration;
@@ -42,7 +44,34 @@ public interface UserService {
      * @param username to look for
      * @return
      */
+    @Transactional
     boolean isUsernameAlreadyRegistred(@NotNull String username);
+
+    /**
+     * Approve a registred user
+     *
+     * @param username
+     * @return
+     */
+    @Transactional
+    User approveUser(@NotNull String username) throws UserNotFoundException, UserIsAlreadyApprovedException;
+
+    /**
+     * Save a user
+     *
+     * @param user
+     */
+    @Transactional
+    User save(User user);
+
+    /**
+     * Update a user
+     *
+     * @param user
+     * @return
+     */
+    @Transactional
+    User update(User user);
 
 /*
     User createUser(

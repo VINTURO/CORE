@@ -82,7 +82,7 @@
 .swagger-section pre .vhdl .attribute,
 .swagger-section pre .clojure .attribute,
 .swagger-section pre .coffeescript .property {
-  color: #88F;
+  color: #8888ff;
 }
 .swagger-section pre .keyword,
 .swagger-section pre .id,
@@ -126,6 +126,7 @@
   max-width: 960px;
   margin-left: auto;
   margin-right: auto;
+  /* JSONEditor specific styling */
 }
 .swagger-section .swagger-ui-wrap b,
 .swagger-section .swagger-ui-wrap strong {
@@ -457,6 +458,17 @@
 }
 .swagger-section .swagger-ui-wrap .required {
   font-weight: bold;
+}
+.swagger-section .swagger-ui-wrap .editor_holder {
+  font-family: "Anonymous Pro", "Menlo", "Consolas", "Bitstream Vera Sans Mono", "Courier New", monospace;
+  font-size: 0.9em;
+}
+.swagger-section .swagger-ui-wrap .editor_holder label {
+  font-weight: normal!important;
+  /* JSONEditor uses bold by default for all labels, we revert that back to normal to not give the impression that by default fields are required */
+}
+.swagger-section .swagger-ui-wrap .editor_holder label.required {
+  font-weight: bold!important;
 }
 .swagger-section .swagger-ui-wrap input.parameter {
   width: 300px;
@@ -1220,15 +1232,6 @@
 }
 .swagger-section #header {
   background-color: #89bf04;
-  
-	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffaf4b+0,ff920a+100;Orange+3D+%231 */
-	background: rgb(255,175,75); /* Old browsers */
-	background: -moz-linear-gradient(top,  rgba(255,175,75,1) 0%, rgba(255,146,10,1) 100%); /* FF3.6-15 */
-	background: -webkit-linear-gradient(top,  rgba(255,175,75,1) 0%,rgba(255,146,10,1) 100%); /* Chrome10-25,Safari5.1-6 */
-	background: linear-gradient(to bottom,  rgba(255,175,75,1) 0%,rgba(255,146,10,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffaf4b', endColorstr='#ff920a',GradientType=0 ); /* IE6-9 */
-
-  
   padding: 14px;
 }
 .swagger-section #input_baseUrl {
@@ -1288,4 +1291,10 @@
   min-height: 30px;
   text-align: center;
   padding-top: 10px;
+}
+.swagger-section .swagger-collapse:before {
+  content: "-";
+}
+.swagger-section .swagger-expand:before {
+  content: "+";
 }
